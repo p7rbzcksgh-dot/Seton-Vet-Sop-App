@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seton Vet Clinic SOP APP</title>
+  <meta name="description" content="Seton Veterinary Clinic SOP builder and local SOP library." />
+  <meta name="theme-color" content="#073653" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <noscript>This app needs JavaScript enabled to build, save, export, and print SOPs.</noscript>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="brand-block">
+        <img class="brand-logo" src="assets/seton-logo-clean.png" alt="Seton Veterinary Clinic" />
+        <div class="brand-caption">SOP APP</div>
+      </div>
+      <nav class="nav-list">
+        <button class="nav-item is-active" type="button" data-nav="builder"><span>⌂</span><em>Dashboard</em></button>
+        <button class="nav-item" type="button" data-nav="builder"><span>▤</span><em>SOP Builder</em></button>
+        <button class="nav-item" type="button" data-nav="saved"><span>▣</span><em>Saved SOPs</em></button>
+        <button class="nav-item" type="button" data-nav="templates"><span>✚</span><em>Templates</em></button>
+        <button class="nav-item" type="button" data-nav="library"><span>▧</span><em>Image Library</em></button>
+        <button class="nav-item" type="button" data-nav="review"><span>✓</span><em>Review Queue</em></button>
+        <button class="nav-item" type="button" data-nav="settings"><span>⚙</span><em>Export / Settings</em></button>
+      </nav>
+      <div class="sidebar-card">
+        <strong>Consistent care.</strong>
+        <span>Clear SOPs for every team member, every shift.</span>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="hamburger" type="button" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+        <img class="mobile-logo" src="assets/seton-logo-clean.png" alt="Seton Veterinary Clinic" />
+        <div class="topbar-copy">
+          <span class="eyebrow">SOP Builder</span>
+          <h1 id="pageTitle">Create / Edit SOP</h1>
+          <p>Build clear, photo-supported procedures for clinic staff.</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn secondary" type="button" data-action="new-sop">New SOP</button>
+          <button class="btn secondary" type="button" data-action="save-draft">Save Draft</button>
+          <button class="btn primary" type="button" data-action="submit-review">Submit for Review</button>
+          <button class="btn navy" type="button" data-action="print-pdf">Print / PDF</button>
+        </div>
+      </header>
+
+      <section class="status-strip" aria-live="polite">
+        <div><strong>Local autosave:</strong> <span id="autosaveStatus">Ready</span></div>
+        <div><strong>Current SOP:</strong> <span id="currentSopName">Untitled SOP</span></div>
+        <div><strong>Status:</strong> <span id="currentSopStatus" class="pill">Draft</span></div>
+      </section>
+
+      <section class="view is-visible" id="builderView" aria-label="SOP builder">
+        <div class="builder-grid">
+          <div class="builder-column">
+            <section class="card" id="detailsCard">
+              <div class="card-head">
+                <div>
+                  <h2>SOP Details</h2>
+                  <p>Fill in the core information for this procedure.</p>
+                </div>
+              </div>
+              <div class="form-grid">
+                <label>SOP Title <b>*</b><input data-field="title" type="text" /></label>
+                <label>Department <b>*</b>
+                  <select data-field="department">
+                    <option>Exam Rooms</option>
+                    <option>Reception / Client Care</option>
+                    <option>Treatment Area</option>
+                    <option>Surgery</option>
+                    <option>Dental</option>
+                    <option>Pharmacy</option>
+                    <option>Lab</option>
+                    <option>Inventory</option>
+                    <option>Cleaning / Closing</option>
+                    <option>Emergency</option>
+                  </select>
+                </label>
+                <label>SOP Number<input data-field="number" type="text" /></label>
+                <label>Revision <b>*</b><input data-field="revision" type="text" /></label>
+                <label>Author / Owner <b>*</b><input data-field="author" type="text" /></label>
+                <label>Review Frequency <b>*</b>
+                  <select data-field="frequency">
+                    <option>After Every Appointment</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Every 6 Months</option>
+                    <option>12 Months</option>
+                    <option>As Needed</option>
+                  </select>
+                </label>
+                <label>Effective Date<input data-field="effectiveDate" type="date" /></label>
+                <label>Risk Level
+                  <select data-field="risk">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                  </select>
+                </label>
+                <label class="span-2">Purpose <b>*</b><textarea data-field="purpose" rows="3"></textarea></label>
+                <label class="span-2">Safety Notes / Warnings<textarea data-field="safety" rows="3"></textarea></label>
+                <label class="span-2">Required Tools / PPE<textarea data-field="tools" rows="3"></textarea></label>
+              </div>
+            </section>
+
+            <section class="card" id="attachmentCard">
+              <div class="card-head compact">
+                <div>
+                  <h2>Photos / Attachments</h2>
+                  <p>Upload clinic photos to support the SOP. Images are saved inside the SOP file.</p>
+                </div>
+                <label class="btn upload-btn">Upload Photos<input data-upload="top" type="file" multiple accept="image/*" /></label>
+              </div>
+              <div class="image-grid" id="topImageGrid"></div>
+            </section>
+
+            <section class="card" id="sectionsCard">
+              <div class="card-head compact">
+                <div>
+                  <h2>Full Field Sections</h2>
+                  <p>Add as many sections as needed, then add unlimited lines inside each section.</p>
+                </div>
+                <button class="btn primary" type="button" data-action="add-section">+ Add Full Field</button>
+              </div>
+              <div id="sectionsList" class="section-list"></div>
+            </section>
+
+            <section class="card" id="stepsCard">
+              <div class="card-head compact">
+                <div>
+                  <h2>Procedure Steps</h2>
+                  <p>Build numbered, photo-supported steps for staff to follow.</p>
+                </div>
+                <button class="btn primary" type="button" data-action="add-step">+ Add Step</button>
+              </div>
+              <div id="stepsList" class="step-list"></div>
+            </section>
+          </div>
+
+          <aside class="preview-column">
+            <section class="card preview-card sticky-preview">
+              <div class="card-head compact">
+                <div>
+                  <h2>Live SOP Preview</h2>
+                  <p>What staff will see when printed or exported.</p>
+                </div>
+              </div>
+              <div id="previewPane" class="preview-pane"></div>
+              <div class="preview-actions">
+                <button class="btn navy" type="button" data-action="print-pdf">Print / Save PDF</button>
+                <button class="btn secondary" type="button" data-action="export-html">Download HTML</button>
+                <button class="btn secondary" type="button" data-action="export-json">Download SOP File</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="savedView" aria-label="Saved SOPs">
+        <section class="card">
+          <div class="card-head compact">
+            <div>
+              <h2>Saved SOPs</h2>
+              <p>These are saved in this browser. Export backups before clearing browser data.</p>
+            </div>
+            <button class="btn secondary" type="button" data-action="refresh-saved">Refresh</button>
+          </div>
+          <div id="savedList" class="saved-list"></div>
+        </section>
+      </section>
+
+      <section class="view" id="templatesView" aria-label="SOP templates">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>SOP Templates</h2>
+              <p>Start from a clinic-ready template, then edit the details and photos.</p>
+            </div>
+          </div>
+          <div id="templateList" class="template-grid"></div>
+        </section>
+      </section>
+
+      <section class="view" id="libraryView" aria-label="Image library">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Image Library</h2>
+              <p>Quick view of all images attached to the current SOP.</p>
+            </div>
+          </div>
+          <div id="libraryGrid" class="image-grid large"></div>
+        </section>
+      </section>
+
+      <section class="view" id="reviewView" aria-label="Review queue">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Review Queue</h2>
+              <p>Drafts submitted for review will appear here.</p>
+            </div>
+          </div>
+          <div id="reviewList" class="saved-list"></div>
+        </section>
+      </section>
+
+      <section class="view" id="settingsView" aria-label="Export and settings">
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <h2>Export / Settings</h2>
+              <p>Print, save to local hard drive, import backups, or export a complete SOP file.</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <button class="settings-tile" type="button" data-action="print-pdf"><strong>Print / Save as PDF</strong><span>Opens a print-ready SOP. Choose Print or Save as PDF from the browser dialog.</span></button>
+            <button class="settings-tile" type="button" data-action="save-file"><strong>Save to Local Hard Drive</strong><span>Downloads a .json SOP backup, or uses the browser file picker when supported.</span></button>
+            <button class="settings-tile" type="button" data-action="export-html"><strong>Download Printable HTML</strong><span>Creates a standalone SOP file that can be opened on any computer.</span></button>
+            <button class="settings-tile" type="button" data-action="export-json"><strong>Download SOP Data</strong><span>Exports the editable SOP data and embedded images.</span></button>
+            <label class="settings-tile import-tile"><strong>Import SOP Backup</strong><span>Load a previously exported .json SOP file.</span><input id="importInput" type="file" accept="application/json,.json" /></label>
+            <button class="settings-tile danger" type="button" data-action="clear-current"><strong>Clear Current Draft</strong><span>Starts a blank SOP. Your saved SOP library will not be deleted.</span></button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="mobile-actions" aria-label="Quick actions">
+    <button class="btn secondary" type="button" data-action="save-draft">Save Draft</button>
+    <button class="btn primary" type="button" data-action="submit-review">Submit</button>
+    <button class="btn navy" type="button" data-action="print-pdf">PDF</button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

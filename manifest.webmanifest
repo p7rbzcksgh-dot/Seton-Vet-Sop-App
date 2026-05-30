@@ -1,0 +1,14 @@
+{
+  "name": "Seton Vet Clinic SOP APP",
+  "short_name": "Seton SOP",
+  "description": "Create, save, print, and export Seton Veterinary Clinic SOPs.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fcfc",
+  "theme_color": "#073653",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
